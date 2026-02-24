@@ -45,7 +45,8 @@ retries = Retry(
     allowed_methods={"POST"},
 )
 session = requests_cache.CachedSession(
-    "google_search_cache", allowable_methods=["POST"]
+    str(pathlib.Path(__file__).parent.parent / "google_search_cache"),
+    allowable_methods=["POST"],
 )
 session.mount("http://", HTTPAdapter(max_retries=retries))
 session.mount("https://", HTTPAdapter(max_retries=retries))
