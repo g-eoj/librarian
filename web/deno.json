@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "check": "deno fmt --check . && deno lint . && deno check main.ts"
+  },
+  "exclude": ["**/_fresh/*"]
+}
