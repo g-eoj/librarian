@@ -127,31 +127,35 @@ export default function Chat() {
           if (line.startsWith("event:")) {
             eventType = line.slice(6).trim();
           } else if (line.startsWith("data:")) {
-            const data = JSON.parse(line.slice(5).trim());
-            if (eventType === "node") {
-              currentNode.value = data.node_type;
-            } else if (eventType === "answer") {
-              messageHistory.value = [
-                ...messageHistory.value,
-                {
-                  query: userQuery,
-                  answer: String(data.answer),
-                  references: data.references || [],
-                },
-              ];
-              currentNode.value = null;
-              currentQuery.value = null;
-            } else if (eventType === "error") {
-              messageHistory.value = [
-                ...messageHistory.value,
-                {
-                  query: userQuery,
-                  answer: `Error: ${data.message}`,
-                  references: [],
-                },
-              ];
-              currentNode.value = null;
-              currentQuery.value = null;
+            try {
+              const data = JSON.parse(line.slice(5).trim());
+              if (eventType === "node") {
+                currentNode.value = data.node_type;
+              } else if (eventType === "answer") {
+                messageHistory.value = [
+                  ...messageHistory.value,
+                  {
+                    query: userQuery,
+                    answer: String(data.answer),
+                    references: data.references || [],
+                  },
+                ];
+                currentNode.value = null;
+                currentQuery.value = null;
+              } else if (eventType === "error") {
+                messageHistory.value = [
+                  ...messageHistory.value,
+                  {
+                    query: userQuery,
+                    answer: `Error: ${data.message}`,
+                    references: [],
+                  },
+                ];
+                currentNode.value = null;
+                currentQuery.value = null;
+              }
+            } catch {
+              // Skip malformed SSE data and continue processing
             }
           }
         }

@@ -78,7 +78,7 @@ export function ControlsPanel() {
           <HealthStatus />
           <ControlRow
             label="Baseline Thinking Effort"
-            description="Effects the time it takes to answer queries."
+            description="Affects the time it takes to answer queries."
             stacked
           >
             <ControlNumberSlider
