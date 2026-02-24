@@ -2,9 +2,7 @@
 
 Fresh 2 frontend for the Librarian local AI research assistant.
 
-Built with [Deno](https://deno.com), [Fresh 2](https://fresh.deno.dev),
-[Preact](https://preactjs.com), [Vite](https://vite.dev), and
-[Tailwind CSS v4](https://tailwindcss.com).
+Built with [Deno](https://deno.com), [Fresh 2](https://fresh.deno.dev), [Preact](https://preactjs.com), [Vite](https://vite.dev), and [Tailwind CSS v4](https://tailwindcss.com).
 
 ## Prerequisites
 
@@ -38,14 +36,8 @@ web/
 
 ## Architecture
 
-**Islands**: Only components in `islands/` run on the client. Everything in
-`components/` is server-rendered. This keeps the JS bundle small — interactivity
-is opt-in per component.
+**Islands**: Only components in `islands/` run on the client. Everything in `components/` is server-rendered. This keeps the JS bundle small — interactivity is opt-in per component.
 
-**State**: Shared signals live in `utils/appState.ts`. Persistent state
-(bookmark groups, controls settings, message history) is synced to
-`localStorage` via `createPersistedSignal`.
+**State**: Shared signals live in `utils/appState.ts`. Persistent state (bookmark groups, controls settings, message history) is synced to `localStorage` via `createPersistedSignal`.
 
-**Backend connection**: The frontend connects to the Python API on the port
-specified in `librarian.config.json` (read via `/api/config`). Queries stream
-over SSE.
+**Backend connection**: The frontend connects to the Python API on the port specified in `librarian.config.json` (read via `/api/config`). Queries stream over SSE.

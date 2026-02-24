@@ -18,6 +18,9 @@
   "exclude": [
     "**/_fresh/*"
   ],
+  "fmt": {
+    "exclude": ["**/*.md"]
+  },
   "imports": {
     "@/": "./",
     "fresh": "jsr:@fresh/core@^2.2.0",
