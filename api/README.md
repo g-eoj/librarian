@@ -2,6 +2,18 @@
 
 FastAPI backend for the Librarian AI research assistant. Runs an agentic workflow that searches the web, reads pages, and runs Python code to answer questions.
 
+## Features
+
+- Web and academic paper search with cited references
+- Reads web pages and PDFs via Playwright (Firefox + pdf.js)
+- Python execution via MCP for computations and simulations
+- Self-reviewing answers — the router critiques its own responses before
+  returning them
+- LLM inference via vLLM or any OpenAI-compatible endpoint
+- URL document cache (ChromaDB with cosine similarity) so pages aren't
+  re-fetched on follow-up questions
+- Per-session message history for multi-turn conversations
+
 ## Architecture
 
 The API is built on [pydantic-graph](https://ai.pydantic.dev/graph/) with three nodes that cycle until an answer is produced:
@@ -11,6 +23,30 @@ The API is built on [pydantic-graph](https://ai.pydantic.dev/graph/) with three 
 - **CoderNode** — runs Python via an MCP subprocess to compute results
 
 The LLM is served locally via vLLM (OpenAI-compatible API).
+
+## Agent Workflow
+
+```mermaid
+%%{init: {'theme': 'neutral'}}%%
+flowchart TD
+    A[Client POST /api/query] -->|SSE Stream| B[FastAPI Server]
+    B --> C[run_agent]
+    C --> D[agent_graph.iter]
+    D --> E[RouterNode]
+    E -->|call_researcher| F[ResearchNode]
+    E -->|call_coder| G[CoderNode]
+    E -->|make_response| H{ApprovalAgent}
+    F -->|search_web/search_papers| I[Serper.dev API]
+    F -->|read_url| J[Playwright + ChromaDB]
+    J --> K[Vector Store]
+    F -->|feedback| E
+    G -->|MCP Python Execution| L[uvx mcp-run-python]
+    G -->|feedback| E
+    H -->|approved or max retries| M[End with FinalAnswer]
+    H -->|rejected| E
+    M --> N[SSE answer event]
+    N --> O[Client receives answer + references]
+```
 
 ## Setup
 
