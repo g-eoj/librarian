@@ -1,0 +1,42 @@
+[project]
+name = "librarian"
+version = "0.1.0"
+description = "AI Knowledge Gateway"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "chromadb>=1.4.1",
+    "cragents @ git+https://github.com/g-eoj/cragents@v0.1.0",
+    "fastapi>=0.128.0",
+    "langchain-text-splitters>=1.1.0",
+    "logfire>=4.19.0",
+    "markdownify>=1.2.2",
+    "playwright>=1.57.0",
+    "pydantic-ai",
+    "requests-cache>=1.2.1",
+    "transformers>=4.57.6",
+    "uvicorn>=0.40.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["librarian"]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.5.1",
+    "pyright",
+    "pytest",
+    "ruff",
+]
+
+[tool.pyright]
+include = ["librarian"]
+pythonVersion = "3.12"
+typeCheckingMode = "standard"
