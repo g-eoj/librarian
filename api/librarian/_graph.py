@@ -84,7 +84,7 @@ class State:
     references: list[str] = field(default_factory=list[str])
     references_required: int = 1
 
-    answer_trys: int = 0
+    answer_tries: int = 0
     baseline_thinking_effort: int = 5
     dynamic_thinking_effort: bool = True
     message_memory: list[ModelMessage] = field(default_factory=list[ModelMessage])
@@ -154,9 +154,9 @@ class RouterNode(BaseNode[State, None, FinalAnswer]):
         if isinstance(run.output, FinalAnswer):
             approval_complexity = router_complexity
             if ctx.state.dynamic_thinking_effort:
-                approval_complexity += ctx.state.answer_trys
+                approval_complexity += ctx.state.answer_tries
 
-            ctx.state.answer_trys += 1
+            ctx.state.answer_tries += 1
             potential_final_answer = run.output
             approval_agent = CRAgent(
                 instructions=(
@@ -194,7 +194,7 @@ class RouterNode(BaseNode[State, None, FinalAnswer]):
             ctx.state.message_memory += approval_run.new_messages()
             if (
                 approval_run.output.answer_accepted
-                or ctx.state.answer_trys > MAX_RETRIES
+                or ctx.state.answer_tries > MAX_RETRIES
             ):
                 potential_final_answer.references = list(set(ctx.state.references))
                 return End(potential_final_answer)
@@ -367,9 +367,13 @@ class ResearchNode(BaseNode[State, None, FinalAnswer]):
             )
             local_message_history += select_run.new_messages()
 
-            query_documents = await read_url(
-                query=self.research_query.query, url=select_run.output.url
-            )
+            try:
+                query_documents = await read_url(
+                    query=self.research_query.query, url=select_run.output.url
+                )
+            except Exception:
+                search_results = [sr for sr in search_results if sr.url != select_run.output.url]
+                continue
             assert query_documents["documents"] is not None
             assert query_documents["distances"] is not None
             max_distance = 0.3

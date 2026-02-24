@@ -78,17 +78,19 @@ async def get_md(path: str) -> str:
             }
         )
         page = await browser.new_page()
-        try:
-            await page.goto(path, wait_until="commit")
-            await asyncio.sleep(3)
-        except Exception:
-            return f"Cannot access: {path}"
+        await page.goto(path, wait_until="commit")
+        await asyncio.sleep(3)
         for frame in page.frames:
             try:
-                # force at most 20 pages to load
-                for _ in range(20):
+                # force pdf.js to render all pages (see issue #2 for a more robust fix)
+                await frame.page.wait_for_function(
+                    "typeof PDFViewerApplication !== 'undefined' && PDFViewerApplication.initialized",
+                    timeout=2000,
+                )
+                total_pages = await frame.page.evaluate("PDFViewerApplication.pagesCount")
+                for _ in range(min(total_pages, 50) - 1):
                     await frame.page.keyboard.press("n")
-                    await page.wait_for_timeout(10)
+                    await page.wait_for_timeout(50)
                 # try loading the pdf viewer
                 content = await frame.inner_html("id=viewer", timeout=500)
             except Exception:
@@ -168,7 +170,7 @@ async def search_papers(
     result = session.post(
         url=url,
         data={"q": search_query, "num": 10},
-        headers={"X-API-KEY": os.getenv("SERPER_API_TOKEN")},
+        headers={"X-API-KEY": os.environ["SERPER_API_TOKEN"]},
     )
     result.raise_for_status()
     result = result.json()["organic"]
@@ -198,7 +200,7 @@ async def search_web(
     result = session.post(
         url=url,
         data={"q": search_query, "num": 10},
-        headers={"X-API-KEY": os.getenv("SERPER_API_TOKEN")},
+        headers={"X-API-KEY": os.environ["SERPER_API_TOKEN"]},
     )
     result.raise_for_status()
     result = result.json()["organic"]

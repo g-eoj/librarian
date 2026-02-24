@@ -189,8 +189,6 @@ async def run_agent(
             await process_task
         except asyncio.CancelledError:
             pass
-        # Ensure messages are saved even on cancellation
-        sessions[session_id] = current_messages
 
 
 check_env()
