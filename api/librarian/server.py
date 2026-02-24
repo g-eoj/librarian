@@ -25,6 +25,8 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from pydantic_ai.messages import ModelMessage
 
+from pydantic_graph import End
+
 from librarian._graph import CoderNode, ResearchNode, RouterNode, State, agent_graph
 from librarian._utils import check_env
 
@@ -105,6 +107,7 @@ async def run_agent(
                     dynamic_thinking_effort=dynamic_thinking_effort,
                 ),
             ) as run:
+                node = None
                 async for node in run:
                     node_type = type(node).__name__
                     node_data = {}
@@ -139,6 +142,7 @@ async def run_agent(
                         break
 
                 if not cancelled.is_set():
+                    assert isinstance(node, End)
                     result = node.data.model_dump()
 
                     await event_queue.put(

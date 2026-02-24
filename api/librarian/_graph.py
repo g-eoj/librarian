@@ -94,7 +94,7 @@ class State:
 
 
 @dataclass
-class RouterNode(BaseNode[State]):
+class RouterNode(BaseNode[State, None, FinalAnswer]):
     """Routes task steps to tools or agents. Decides when task is complete."""
 
     feedback: str | None = None
@@ -201,9 +201,11 @@ class RouterNode(BaseNode[State]):
 
             return RouterNode(feedback=format_as_xml(approval_run.output))
 
+        raise RuntimeError(f"Unexpected output type: {type(run.output)}")
+
 
 @dataclass
-class CoderNode(BaseNode[State, None, CoderTask]):
+class CoderNode(BaseNode[State, None, FinalAnswer]):
     """Python coder."""
 
     task: CoderTask
@@ -259,7 +261,7 @@ class CoderNode(BaseNode[State, None, CoderTask]):
 
 
 @dataclass
-class ResearchNode(BaseNode[State, None, str]):
+class ResearchNode(BaseNode[State, None, FinalAnswer]):
     """Finds information."""
 
     research_query: ResearchQuery
@@ -283,7 +285,10 @@ class ResearchNode(BaseNode[State, None, str]):
 
     async def run(self, ctx: GraphRunContext[State]) -> RouterNode | ResearchNode:
         query_hash = hashlib.sha256(
-            (format_as_xml(self.research_query) + format_as_xml(ctx.state.allowed_urls)).encode()
+            (
+                format_as_xml(self.research_query)
+                + format_as_xml(ctx.state.allowed_urls)
+            ).encode()
         ).hexdigest()
         if query_hash in ctx.state.research_query_memory:
             return RouterNode(
@@ -365,6 +370,8 @@ class ResearchNode(BaseNode[State, None, str]):
             query_documents = await read_url(
                 query=self.research_query.query, url=select_run.output.url
             )
+            assert query_documents["documents"] is not None
+            assert query_documents["distances"] is not None
             max_distance = 0.3
             relevant_chunks = [
                 (i, d, dist)
@@ -408,4 +415,6 @@ class ResearchNode(BaseNode[State, None, str]):
         return RouterNode(feedback=feedback)
 
 
-agent_graph = Graph(nodes=[RouterNode, CoderNode, ResearchNode])
+agent_graph: Graph[State, None, FinalAnswer] = Graph(
+    nodes=[RouterNode, CoderNode, ResearchNode]
+)

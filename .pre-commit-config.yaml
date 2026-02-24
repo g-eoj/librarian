@@ -3,14 +3,14 @@ repos:
     hooks:
       - id: ruff-check
         name: ruff check
-        entry: uv run --directory api ruff check --fix
+        entry: uv run --project api ruff check --fix
         language: system
         types: [python]
         files: ^api/
 
       - id: ruff-format
         name: ruff format
-        entry: uv run --directory api ruff format
+        entry: uv run --project api ruff format
         language: system
         types: [python]
         files: ^api/

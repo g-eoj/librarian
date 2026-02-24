@@ -65,6 +65,7 @@ def build_url_restricted_query(query: str, allowed_urls: list[str] | None) -> st
     sites_filter = " OR ".join(f"site:{s}" for s in unique_sites)
     return f"{sites_filter} {query}"
 
+
 async def get_md(path: str) -> str:
     """Convert a web page or PDF to markdown that is easily consumable by an LLM."""
     md = ""
