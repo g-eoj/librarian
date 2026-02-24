@@ -80,16 +80,16 @@ class State:
 
     task: str
 
-    allowed_urls: list[str] = field(default_factory=list[str])
-    references: list[str] = field(default_factory=list[str])
+    allowed_urls: list[str] = field(default_factory=list)
+    references: list[str] = field(default_factory=list)
     references_required: int = 1
 
     answer_tries: int = 0
     baseline_thinking_effort: int = 5
     dynamic_thinking_effort: bool = True
-    message_memory: list[ModelMessage] = field(default_factory=list[ModelMessage])
+    message_memory: list[ModelMessage] = field(default_factory=list)
     research_query_memory: dict[str, list[NoteWithReference]] = field(
-        default_factory=dict[str, list[NoteWithReference]]
+        default_factory=dict
     )
 
 
@@ -380,9 +380,10 @@ class ResearchNode(BaseNode[State, None, FinalAnswer]):
                 query_documents["documents"] is None
                 or query_documents["distances"] is None
             ):
-                raise ValueError(
-                    f"Failed to retrieve documents from {select_run.output.url}"
-                )
+                search_results = [
+                    sr for sr in search_results if sr.url != select_run.output.url
+                ]
+                continue
             max_distance = 0.3
             relevant_chunks = [
                 (i, d, dist)
