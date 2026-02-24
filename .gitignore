@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+.uv/
+*.egg-info/
+dist/
+build/
+
+# Deno
+.deno/
+
+# Fresh
+_fresh/
+fresh.gen.ts
+
+# Node (if any npm packages pulled)
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+librarian.config.json
+
+# Credentials / observability tokens
+.logfire/
+
+# Claude Code workspace
+.claude/
+CLAUDE.md
+
+# Backup files
+*.bk
+*.orig
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# vLLM / Models
+models/
+*.gguf
+*.bin
+*.safetensors
+
+# Data
+data/
+*.db
+*.gif
+*.sqlite
+url_store/
+google_search_cache.sqlite
