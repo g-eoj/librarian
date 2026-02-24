@@ -87,7 +87,9 @@ async def get_md(path: str) -> str:
                     "typeof PDFViewerApplication !== 'undefined' && PDFViewerApplication.initialized",
                     timeout=2000,
                 )
-                total_pages = await frame.page.evaluate("PDFViewerApplication.pagesCount")
+                total_pages = await frame.page.evaluate(
+                    "PDFViewerApplication.pagesCount"
+                )
                 for _ in range(min(total_pages, 50) - 1):
                     await frame.page.keyboard.press("n")
                     await page.wait_for_timeout(50)

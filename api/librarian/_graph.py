@@ -372,7 +372,9 @@ class ResearchNode(BaseNode[State, None, FinalAnswer]):
                     query=self.research_query.query, url=select_run.output.url
                 )
             except Exception:
-                search_results = [sr for sr in search_results if sr.url != select_run.output.url]
+                search_results = [
+                    sr for sr in search_results if sr.url != select_run.output.url
+                ]
                 continue
             assert query_documents["documents"] is not None
             assert query_documents["distances"] is not None
