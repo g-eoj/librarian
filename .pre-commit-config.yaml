@@ -22,3 +22,24 @@ repos:
         types: [python]
         pass_filenames: false
         files: ^api/
+
+      - id: deno-fmt
+        name: deno fmt
+        entry: bash -c 'cd web && deno fmt .'
+        language: system
+        pass_filenames: false
+        files: ^web/
+
+      - id: deno-lint
+        name: deno lint
+        entry: bash -c 'cd web && deno lint .'
+        language: system
+        pass_filenames: false
+        files: ^web/
+
+      - id: deno-check
+        name: deno check
+        entry: bash -c 'cd web && deno check main.ts'
+        language: system
+        pass_filenames: false
+        files: ^web/
