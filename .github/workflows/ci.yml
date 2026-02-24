@@ -13,8 +13,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
       - uses: denoland/setup-deno@v2
-      - name: Install dependencies
+      - name: Install dependencies (API)
         run: uv sync --directory api --dev
+      - name: Install dependencies (web)
+        run: deno install
+        working-directory: web
       - uses: pre-commit/action@v3.0.1
 
   check-web:
@@ -23,6 +26,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v2
+      - name: Install dependencies
+        run: deno install
+        working-directory: web
       - name: Check
         run: deno task check
         working-directory: web
