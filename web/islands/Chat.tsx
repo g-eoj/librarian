@@ -161,7 +161,7 @@ export default function Chat() {
         }
       }
     } catch (err) {
-      if (err.name !== "AbortError") {
+      if (err instanceof Error && err.name !== "AbortError") {
         messageHistory.value = [
           ...messageHistory.value,
           {
