@@ -27,8 +27,11 @@ from pydantic_ai.messages import ModelMessage
 
 from pydantic_graph import End
 
-from librarian._graph import CoderNode, ResearchNode, RouterNode, State, agent_graph
 from librarian._utils import check_env
+
+check_env()
+
+from librarian._graph import CoderNode, ResearchNode, RouterNode, State, agent_graph  # noqa: E402
 
 
 class QueryRequest(BaseModel):
@@ -142,7 +145,10 @@ async def run_agent(
                         break
 
                 if not cancelled.is_set():
-                    assert isinstance(node, End)
+                    if not isinstance(node, End):
+                        raise RuntimeError(
+                            f"Expected End node but got {type(node).__name__}"
+                        )
                     result = node.data.model_dump()
 
                     await event_queue.put(
@@ -190,8 +196,6 @@ async def run_agent(
         except asyncio.CancelledError:
             pass
 
-
-check_env()
 
 app = FastAPI()
 

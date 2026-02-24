@@ -16,6 +16,7 @@
 import asyncio
 import hashlib
 import os
+import pathlib
 import re
 from urllib.parse import urlsplit
 
@@ -116,7 +117,9 @@ async def read_url(query: str, url: str) -> chromadb.QueryResult:
     max_chunks = 100
     max_notes = 9
 
-    chroma_client = chromadb.PersistentClient(path="./url_store")
+    chroma_client = chromadb.PersistentClient(
+        path=str(pathlib.Path(__file__).parent.parent / "url_store")
+    )
 
     url_hash = hashlib.sha256(url.encode()).hexdigest()
     url_collection = chroma_client.get_or_create_collection(

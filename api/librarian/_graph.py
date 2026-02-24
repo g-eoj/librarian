@@ -376,8 +376,13 @@ class ResearchNode(BaseNode[State, None, FinalAnswer]):
                     sr for sr in search_results if sr.url != select_run.output.url
                 ]
                 continue
-            assert query_documents["documents"] is not None
-            assert query_documents["distances"] is not None
+            if (
+                query_documents["documents"] is None
+                or query_documents["distances"] is None
+            ):
+                raise ValueError(
+                    f"Failed to retrieve documents from {select_run.output.url}"
+                )
             max_distance = 0.3
             relevant_chunks = [
                 (i, d, dist)
