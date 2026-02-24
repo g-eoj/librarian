@@ -30,6 +30,12 @@ packages = ["librarian"]
 
 [dependency-groups]
 dev = [
+    "pyright",
     "pytest",
     "ruff",
 ]
+
+[tool.pyright]
+include = ["librarian"]
+pythonVersion = "3.12"
+typeCheckingMode = "standard"
