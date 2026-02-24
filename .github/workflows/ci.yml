@@ -6,12 +6,23 @@ on:
     branches: [main]
 
 jobs:
-  lint-format-typecheck:
+  check-api:
     name: Lint, format, and typecheck (API)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
+      - uses: denoland/setup-deno@v2
       - name: Install dependencies
         run: uv sync --directory api --dev
       - uses: pre-commit/action@v3.0.1
+
+  check-web:
+    name: Lint, format, and typecheck (web)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+      - name: Check
+        run: deno task check
+        working-directory: web

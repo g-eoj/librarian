@@ -22,3 +22,10 @@ repos:
         types: [python]
         pass_filenames: false
         files: ^api/
+
+      - id: deno-check
+        name: deno check
+        entry: bash -c 'cd web && deno task check'
+        language: system
+        pass_filenames: false
+        files: ^web/
