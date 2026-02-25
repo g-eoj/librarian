@@ -1,5 +1,7 @@
 # Librarian
 
+![Librarian](Librarian.png)
+
 A local AI research assistant. Ask it questions; it searches the web and academic papers, reasons over the results, and gives you a cited answer.
 
 ## Features
