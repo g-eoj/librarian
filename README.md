@@ -76,7 +76,7 @@ export SERPER_API_TOKEN=your-serper-key
 deno task start
 ```
 
-Librarian starts the backend and frontend, then opens your browser.
+Librarian starts the backend and frontend. Open http://localhost:8080 in your browser.
 
 ## Configuration
 

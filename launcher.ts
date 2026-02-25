@@ -145,13 +145,17 @@ function streamOutput(name: string, stream: ReadableStream<Uint8Array>) {
   const decoder = new TextDecoder();
 
   (async () => {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const text = decoder.decode(value);
-      for (const line of text.split("\n").filter((l) => l.trim())) {
-        console.log(`[${name}] ${line}`);
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const text = decoder.decode(value);
+        for (const line of text.split("\n").filter((l) => l.trim())) {
+          console.log(`[${name}] ${line}`);
+        }
       }
+    } catch {
+      // Reader errors are non-fatal (process may have exited)
     }
   })();
 }
