@@ -1,0 +1,7 @@
+{
+  "tasks": {
+    "start": "deno run -A launcher.ts",
+    "dev:web": "cd web && deno task dev",
+    "build:web": "cd web && deno task build"
+  }
+}
