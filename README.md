@@ -7,7 +7,7 @@ A local AI research assistant. Ask it questions; it searches the web and academi
 ## Features
 
 - **Agentic research** — routes queries to a research agent that searches, reads, and synthesizes sources before answering
-- **Web + paper search** — searches the web via [Serper](https://serper.dev) and academic papers via Semantic Scholar
+- **Web + paper search** — searches the web and academic papers via [Serper](https://serper.dev)
 - **Cited answers** — every answer includes references to the sources used
 - **Bookmark groups** — pin specific sites so the agent always searches them
 - **Conversation memory** — follow-up questions build on previous answers within a session
@@ -23,8 +23,7 @@ graph LR
     Backend --> Router["Router"]
     Router --> Research["Research Agent"]
     Router --> Coder["Coder Agent"]
-    Research -->|web search| Serper
-    Research -->|paper search| SemanticScholar["Semantic Scholar"]
+    Research -->|web + paper search| Serper
     Research -->|fetch URLs| Web
     Backend --> vLLM["vLLM\n(local LLM)"]
 ```
