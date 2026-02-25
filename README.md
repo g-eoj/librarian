@@ -53,30 +53,25 @@ vllm serve $VLLM_MODEL_NAME \
 
 > Hermes-format tool calling is required. The `--tool-call-parser` flag must be set, but `--reasoning-parser` must **not** be set.
 
-**2. Install backend dependencies**
+**2. Set environment variables**
+
+Create a `.env` file:
 
 ```sh
-cd api && uv sync && cd ..
+VLLM_BASE_URL=http://localhost:8000/v1
+VLLM_API_KEY=your-vllm-key
+VLLM_MODEL_NAME=your-model-name
+SERPER_API_TOKEN=your-serper-key
 ```
 
-**3. Set environment variables**
+**3. Clone and launch**
 
 ```sh
-export VLLM_BASE_URL=http://localhost:8000/v1
-export VLLM_API_KEY=your-vllm-key
-export VLLM_MODEL_NAME=your-model-name
-export SERPER_API_TOKEN=your-serper-key
+git clone https://github.com/g-eoj/librarian.git && cd librarian
+source .env && deno task start
 ```
 
-> Put these in a `.env` file and `source` it before launching.
-
-**4. Launch**
-
-```sh
-deno task start
-```
-
-Librarian starts the backend and frontend. Open http://localhost:8080 in your browser.
+Open http://localhost:8080 in your browser.
 
 ## Configuration
 
