@@ -20,6 +20,18 @@ jobs:
         working-directory: web
       - uses: pre-commit/action@v3.0.1
 
+  test-api:
+    name: Test (API)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Install dependencies (API)
+        run: uv sync --directory api --dev
+      - name: Run tests
+        run: uv run pytest
+        working-directory: api
+
   check-web:
     name: Lint, format, and typecheck (web)
     runs-on: ubuntu-latest
