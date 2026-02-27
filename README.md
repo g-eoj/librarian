@@ -1,5 +1,8 @@
 # Librarian
 
+![CI](https://github.com/g-eoj/librarian/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/github/license/g-eoj/librarian)
+
 ![Librarian](Librarian.png)
 
 A local AI research assistant. Ask it questions; it searches the web and academic papers, reasons over the results, and gives you a cited answer.
