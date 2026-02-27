@@ -80,8 +80,9 @@ async def get_md(path: str) -> str:
             }
         )
         page = await browser.new_page()
-        await page.goto(path, wait_until="commit")
-        await asyncio.sleep(3)
+        await page.goto(path, wait_until="load")
+        # Brief pause for JS to finish rendering content after the load event.
+        await asyncio.sleep(0.5)
         for frame in page.frames:
             try:
                 # force pdf.js to render all pages (see issue #2 for a more robust fix)
