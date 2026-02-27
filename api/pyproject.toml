@@ -30,11 +30,21 @@ packages = ["librarian"]
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.0",
     "pre-commit>=4.5.1",
     "pyright",
     "pytest",
+    "pytest-cov",
     "ruff",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=librarian --cov-report=term-missing -q"
+
+[tool.coverage.run]
+source = ["librarian"]
+omit = ["tests/*"]
 
 [tool.pyright]
 include = ["librarian"]
