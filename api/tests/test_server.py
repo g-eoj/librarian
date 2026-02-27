@@ -164,7 +164,7 @@ class TestHealthEndpoint:
         mock_async_client.get = AsyncMock(return_value=mock_resp)
         return mock_async_client
 
-    def test_returns_vllm_true_when_reachable(self, monkeypatch):
+    def test_returns_vllm_true_when_reachable(self):
         mock_client = self._mock_client(status_code=200)
         with patch("httpx.AsyncClient") as MockClass:
             MockClass.return_value.__aenter__ = AsyncMock(return_value=mock_client)
