@@ -12,12 +12,7 @@
 
   /* Backgrounds */
   --bg-page: theme(--color-zinc-800);
-  --bg-panel: color-mix(in srgb, theme(--color-zinc-900) 50%, transparent);
-  --bg-panel-hover: color-mix(
-    in srgb,
-    theme(--color-zinc-900) 80%,
-    transparent
-  );
+  --bg-panel: color-mix(in srgb, theme(--color-zinc-900) 95%, transparent);
 
   /* Content colors */
   --color-answer: color-mix(in srgb, theme(--color-zinc-100) 90%, transparent);
@@ -61,14 +56,11 @@
 .controls-panel {
   @apply border-zinc-700/50 text-green-200 transition-colors;
   background-color: var(--bg-panel);
-
-  &:hover {
-    background-color: var(--bg-panel-hover);
-  }
-
-  @media (width >= 99rem) {
-    @apply absolute top-0 left-0 h-full z-10;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  z-index: 40;
 
   h1 {
     @apply text-lg font-light mt-5;
@@ -139,6 +131,36 @@
   &[open] .controls-section-content {
     animation: controls-fade-in 0.3s cubic-bezier(0.9, 0, 1, 1);
   }
+}
+
+@keyframes panel-slide-in {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes panel-slide-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+.controls-panel.panel-expanded {
+  animation: panel-slide-in 0.3s ease;
+}
+
+.controls-panel.panel-closing {
+  animation: panel-slide-out 0.3s ease forwards;
 }
 
 @keyframes controls-fade-in {
