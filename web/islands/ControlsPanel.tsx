@@ -1,4 +1,5 @@
 import { signal } from "@preact/signals";
+import { useEffect } from "preact/hooks";
 import {
   ControlAddButton,
   ControlNumberInput,
@@ -22,6 +23,7 @@ import { BookmarkGroupRow } from "../components/BookmarkGroupRow.tsx";
 import { HealthStatus } from "../components/HealthStatus.tsx";
 
 const collapsed = signal(false);
+const isClosing = signal(false);
 
 const collapsedPanelArrow = (
   <svg
@@ -38,7 +40,21 @@ const collapsedPanelArrow = (
   </svg>
 );
 
+function closePanel() {
+  isClosing.value = true;
+  setTimeout(() => {
+    collapsed.value = true;
+    isClosing.value = false;
+  }, 300);
+}
+
 export function ControlsPanel() {
+  useEffect(() => {
+    if (globalThis.innerWidth < 1600) {
+      collapsed.value = true;
+    }
+  }, []);
+
   if (collapsed.value) {
     return (
       <div
@@ -52,10 +68,14 @@ export function ControlsPanel() {
   }
 
   return (
-    <div class="controls-panel relative border-r overflow-y-auto overflow-x-hidden flex-shrink-0 w-100">
+    <div
+      class={`controls-panel panel-expanded${
+        isClosing.value ? " panel-closing" : ""
+      } relative border-r overflow-y-auto overflow-x-hidden flex-shrink-0 w-100`}
+    >
       <button
         type="button"
-        onClick={() => (collapsed.value = true)}
+        onClick={closePanel}
         class="absolute top-2 right-2 p-1 transition-colors"
         style="color: var(--color-muted)"
         title="Close controls"

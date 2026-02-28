@@ -186,79 +186,75 @@ export default function Chat() {
       style="background-color: var(--bg-page)"
     >
       <ControlsPanel />
-      <div class="flex-1 flex flex-col">
-        <div class="flex-1 flex flex-col overflow-y-auto pt-[3%] pb-[10%]">
-          {messageHistory.value.map((result, idx) => (
-            <div key={idx}>
-              <div class="max-w-3xl mx-auto">
-                <Query query={result.query} />
-                <Answer answer={result.answer} references={result.references} />
-              </div>
+      <div class="flex-1 flex flex-col overflow-y-auto px-15 pt-[3%] pb-[10%]">
+        {messageHistory.value.map((result, idx) => (
+          <div key={idx}>
+            <div class="max-w-3xl mx-auto">
+              <Query query={result.query} />
+              <Answer answer={result.answer} references={result.references} />
             </div>
-          ))}
+          </div>
+        ))}
 
-          {isLoading.value && (
-            <div class="max-w-3xl mx-auto w-full">
-              <Query query={currentQuery.value} />
-              <LoadingIndicator node={currentNode.value} onStop={handleStop} />
-            </div>
-          )}
+        {isLoading.value && (
+          <div class="max-w-3xl mx-auto w-full">
+            <Query query={currentQuery.value} />
+            <LoadingIndicator node={currentNode.value} onStop={handleStop} />
+          </div>
+        )}
 
-          {!isLoading.value && (
-            <div class="flex gap-2 max-w-3xl mx-auto w-full">
-              <Query />
-              <form onSubmit={handleSubmit} class="print:hidden flex-1 mt-8">
-                <textarea
-                  autoFocus
-                  rows={1}
-                  class="chat-input"
-                  placeholder={messageHistory.value.length ? "" : "Enter query"}
-                  ref={inputRef}
-                  value={query.value}
-                  onInput={(e) => {
-                    query.value = e.target.value;
-                    e.target.style.height = "auto";
-                    e.target.style.height = e.target.scrollHeight + "px";
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      historyIndex.value = -1;
-                      savedInput.value = "";
-                      handleSubmit(e);
-                    } else if (e.key === "ArrowUp") {
-                      e.preventDefault();
-                      const queries = messageHistory.value.map((r) => r.query);
-                      if (queries.length === 0) return;
-                      if (historyIndex.value === -1) {
-                        savedInput.value = query.value;
-                      }
-                      const newIndex = Math.min(
-                        historyIndex.value + 1,
-                        queries.length - 1,
-                      );
-                      historyIndex.value = newIndex;
-                      query.value = queries[queries.length - 1 - newIndex];
-                    } else if (e.key === "ArrowDown") {
-                      e.preventDefault();
-                      if (historyIndex.value <= 0) {
-                        historyIndex.value = -1;
-                        query.value = savedInput.value;
-                      } else {
-                        const queries = messageHistory.value.map((r) =>
-                          r.query
-                        );
-                        historyIndex.value -= 1;
-                        query.value =
-                          queries[queries.length - 1 - historyIndex.value];
-                      }
+        {!isLoading.value && (
+          <div class="flex gap-2 max-w-3xl mx-auto w-full">
+            <Query />
+            <form onSubmit={handleSubmit} class="print:hidden flex-1 mt-8">
+              <textarea
+                autoFocus
+                rows={1}
+                class="chat-input"
+                placeholder={messageHistory.value.length ? "" : "Enter query"}
+                ref={inputRef}
+                value={query.value}
+                onInput={(e) => {
+                  query.value = e.target.value;
+                  e.target.style.height = "auto";
+                  e.target.style.height = e.target.scrollHeight + "px";
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    historyIndex.value = -1;
+                    savedInput.value = "";
+                    handleSubmit(e);
+                  } else if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    const queries = messageHistory.value.map((r) => r.query);
+                    if (queries.length === 0) return;
+                    if (historyIndex.value === -1) {
+                      savedInput.value = query.value;
                     }
-                  }}
-                />
-              </form>
-            </div>
-          )}
-        </div>
+                    const newIndex = Math.min(
+                      historyIndex.value + 1,
+                      queries.length - 1,
+                    );
+                    historyIndex.value = newIndex;
+                    query.value = queries[queries.length - 1 - newIndex];
+                  } else if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    if (historyIndex.value <= 0) {
+                      historyIndex.value = -1;
+                      query.value = savedInput.value;
+                    } else {
+                      const queries = messageHistory.value.map((r) => r.query);
+                      historyIndex.value -= 1;
+                      query.value =
+                        queries[queries.length - 1 - historyIndex.value];
+                    }
+                  }
+                }}
+              />
+            </form>
+          </div>
+        )}
       </div>
     </div>
   );
